@@ -1,0 +1,18 @@
+﻿<Properties StartupItem="DataBase\DataBase.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="DataBase\Program.cs">
+    <Files>
+      <File FileName="DataBase\Program.cs" Line="16" Column="41" />
+      <File FileName="DataBase\DataBaseHandler.cs" Line="278" Column="5" />
+      <File FileName="DataBase\TODO.txt" Line="21" Column="1" />
+      <File FileName="DataBase\ProjectData.cs" Line="1" Column="1" />
+      <File FileName="DataBase\UserData.cs" Line="82" Column="63" />
+      <File FileName="DataBase\ProjectSuggestionData.cs" Line="1" Column="1" />
+      <File FileName="DataBase\TaskData.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

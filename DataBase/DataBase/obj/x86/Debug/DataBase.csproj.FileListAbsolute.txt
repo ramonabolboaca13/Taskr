@@ -1,0 +1,5 @@
+D:\UT\An III\F_2\II\Taskr\DataBase\DataBase\obj\x86\Debug\DataBase.csprojResolveAssemblyReference.cache
+D:\UT\An III\F_2\II\Taskr\DataBase\DataBase\bin\Debug\DataBase.exe
+D:\UT\An III\F_2\II\Taskr\DataBase\DataBase\bin\Debug\DataBase.pdb
+D:\UT\An III\F_2\II\Taskr\DataBase\DataBase\obj\x86\Debug\DataBase.exe
+D:\UT\An III\F_2\II\Taskr\DataBase\DataBase\obj\x86\Debug\DataBase.pdb

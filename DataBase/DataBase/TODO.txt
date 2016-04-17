@@ -1,0 +1,20 @@
+﻿DataBaseHandler
+
+public bool InsertNewProject (ProjectData newProject) -- Done
+public List<ProjectData> GetActiveProjectsList () -- Done
+public bool InsertNewProject (ProjectData newProject) -- Done
+public bool InsertNewTask (TaskData newTask) -- Done
+public bool ProjectJoinRequest (UserData user, ProjectData project) -- Done
+public bool TaskRequest (UserData user, TaskData task) -- Done
+public bool UpdateProject (ProjectData project) -- Done
+public bool UpdateUser (UserData user) -- Done
+public List<UserData> GetAllUsersRequestingForProject (ProjectData project) -- Done
+public bool RefreshUser (UserData user) -- Done
+
+public ProjectData AdoptProjectSuggestion (UserData user, ProjectSuggestionData projectSuggestion)
+public bool AcceptUserProjectRequest (UserData user, ProjectData project)
+public bool DropTask (UserData user, TaskData task)
+public bool GrantTask (TaskData task, UserData user)
+public bool RemoveTask (TaskData task)
+public bool UpdateProjectList (List<ProjectData> projectList)
+
