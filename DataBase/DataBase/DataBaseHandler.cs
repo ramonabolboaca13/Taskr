@@ -49,7 +49,7 @@ namespace DataBase
 				List<ProjectData> returnList = new List<ProjectData> ();
 
 				OpenConnection ();
-				string query = "SELECT * FROM projects;";
+				string query = "SELECT * FROM projects WHERE TerminatedBy = " + DBDefaults.DefaultId + ";";
 
 				MySqlDataAdapter dataAdapter = new MySqlDataAdapter (query, connection);
 				DataSet ds = new DataSet ();
@@ -283,7 +283,7 @@ namespace DataBase
 
 		/*
 		 * @param user - the user that will be refreshed
-		 * @return bool - all the users
+		 * @return bool - succes
 		 * Also! the user data is changed
 		 */ 
 		public bool RefreshUser (UserData user)
@@ -314,23 +314,28 @@ namespace DataBase
 			}
 		} // End of RefreshUser()
 
-		public bool DropTask (UserData user)
+		/*
+		 * @param project - the project that will be refreshed
+		 * @return bool - succes
+		 * Also! the project data is changed
+		 */ 
+		public bool RefreshProject (ProjectData project)
 		{
 			try {
 				OpenConnection ();
-				string query = "SELECT * FROM users WHERE Id = " + user.ID + ";";
+				string query = "SELECT * FROM projects WHERE Id = " + project.ID + ";";
 
 				MySqlDataAdapter dataAdapter = new MySqlDataAdapter (query, connection);
 				DataSet ds = new DataSet ();
-				dataAdapter.Fill (ds, "users");
+				dataAdapter.Fill (ds, "projects");
 				CloseConnection ();
 
-				if (ds.Tables ["users"].Rows.Count == 0) {
+				if (ds.Tables ["projects"].Rows.Count == 0) {
 					return false;
 				}
 
-				foreach (DataRow row in ds.Tables["users"].Rows) {
-					user.FillFromDataRow (row);
+				foreach (DataRow row in ds.Tables["projects"].Rows) {
+					project.FillFromDataRow (row);
 				}
 
 				return true;
@@ -340,13 +345,203 @@ namespace DataBase
 				Console.WriteLine (e.ToString ());
 				return false;
 			}
+		} // End of RefreshProject()
+
+		/*
+		 * @param user - user that is to be modified
+		 * You could aslo do this manually, but eh. Database can handle it
+		 * Nice and short
+		 */ 
+		public bool DropTask (UserData user)
+		{
+			try {
+				user.ActiveTask = DBDefaults.DefaultId;
+				return this.UpdateUser (user); // TODO check if this thing works
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine (e.ToString ());
+				return false;
+			}
+
 		} // End of DropTask
 
-		//public ProjectData AdoptProjectSuggestion (UserData user, ProjectSuggestionData projectSuggestion)
-		//public bool AcceptUserProjectRequest (UserData user, ProjectData project)
-		//public bool GrantTask (TaskData task, UserData user)
-		//public bool RemoveTask (TaskData task)
-		//public bool UpdateProjectList (List<ProjectData> projectList)
+		/*
+		 * @param user - the user that wants to adopt the projectsuggestion
+		 * @param projectSuggestion - the one that will be adopted? adoptend? ...
+		 * @return ProjecData - after creating the project and database and whatevs
+		 */ 
+		public ProjectData AdoptProjectSuggestion (UserData user, ProjectSuggestionData projectSuggestion)
+		{
+			try {
+				// Check if user has active task
+				this.RefreshUser (user);
+				if (user.ActiveProject != DBDefaults.DefaultId) {
+					return null;
+				}
+
+				// Fetch the data from the projectSuggestion and put it into the new project
+				ProjectData newProject = new ProjectData (user.ID);
+				newProject.Title = projectSuggestion.Title;
+				newProject.ShortDescription = projectSuggestion.ShortDescription;
+				newProject.DetailedDescription = projectSuggestion.DetailedDescription;
+				newProject.CreatedBy = projectSuggestion.CreatedBy;
+				newProject.ProjectLead = user.ID;
+				newProject.DateCreated = DateTime.Now;
+				newProject.Notes = projectSuggestion.Notes;
+				this.InsertNewProject (newProject);
+
+				// HACK I know, I know, It was the deadline's fault!
+				List<ProjectData> listOfAllProjects = this.GetActiveProjectsList();
+				foreach (ProjectData p in listOfAllProjects) {
+					if (p.ProjectLead == newProject.ProjectLead) {
+						newProject = new ProjectData(p); // Rebuild with variables from p (for ID reasons)
+						break;
+					}
+				}
+
+				// Add active task to user
+				user.ActiveProject = newProject.ID;
+				this.UpdateUser (user);
+
+				// Delete SuggestedProject
+				this.RemoveProjectSuggestion (projectSuggestion);
+				projectSuggestion = null;
+
+				return newProject;
+			}
+			catch (Exception e) 
+			{
+				Console.WriteLine (e.ToString ());
+				return null;
+			}
+		} // End of AdoptProjectSuggestions ()
+
+
+		/*
+		 * This function may be unnecessary. Who will even check this code?
+		 * @param task - that task that will be deleted
+		 */ 
+		public bool RemoveTask (TaskData task)
+		{
+			try {
+				OpenConnection ();
+				string query = "DELETE FROM task WHERE  Id = " + task.ID + ";";
+				MySqlCommand command = new MySqlCommand (query, connection);
+
+				command.ExecuteNonQuery();
+				command.Dispose();
+				CloseConnection ();
+				return true;
+			}
+			catch (Exception e) 
+			{
+				Console.WriteLine (e.ToString ());
+				return false;
+			}
+		} // End of RemoveTask
+
+		/*
+		 * @param pj - that projectSuggestion that will be deleted
+		 */ 
+		public bool RemoveProjectSuggestion (ProjectSuggestionData pj)
+		{
+			try {
+				OpenConnection ();
+				string query = "DELETE FROM projectSuggestions WHERE  Id = " + pj.ID + ";";
+				MySqlCommand command = new MySqlCommand (query, connection);
+
+				command.ExecuteNonQuery();
+				command.Dispose();
+				CloseConnection ();
+				return true;
+			}
+			catch (Exception e) 
+			{
+				Console.WriteLine (e.ToString ());
+				return false;
+			}
+		} // End of RemoveTask
+
+		/*  WARNING LAMBDAS AHEAD!! HIDE YOUR CHILDREN!
+		 * @param user - 
+		 */ 
+		public bool AcceptUserProjectRequest (UserData user, ProjectData project)
+		{
+			try {
+				// Check if user requested joining the project
+				// I used a lambda statement because I wanted to use the same variable names
+				// think of them as functions inside of functions
+				 {
+					OpenConnection ();
+					string query = "SELECT * FROM projectrequests WHERE user_id = " 
+						+ user.ID + " AND project_id = " + project.ID + ";";
+					MySqlDataAdapter dataAdapter = new MySqlDataAdapter (query, connection);
+					DataSet ds = new DataSet ();
+					dataAdapter.Fill (ds, "projectrequests");
+					CloseConnection ();
+						
+					if (ds.Tables ["projectrequests"].Rows.Count == 0) {
+						return false;
+					}
+				};
+				// Delete join request
+				{
+					OpenConnection ();
+					string query = "DELETE FROM projectrequests WHERE user_id = " 
+						+ user.ID + " AND project_id = " + project.ID + ";";
+					MySqlCommand command = new MySqlCommand (query, connection);
+
+					command.ExecuteNonQuery();
+					command.Dispose();
+					CloseConnection ();
+				};
+				// Change activeproject
+				user.ActiveProject = project.ID;
+				this.UpdateUser (user);
+
+				return true;
+			}
+			catch (Exception e) 
+			{
+				Console.WriteLine (e.ToString ());
+				return false;
+			}
+		} // End of AcceptUserProjectRequest ()
+
+		/*
+		 * @param task - the task that is to be assigned
+		 * @param uesr - the user, the task that is to be assigned, is assigned to
+		 * @return bool - succes
+		 */ 
+		public bool GrantTask (TaskData task, UserData user)
+		{
+			try {
+				OpenConnection ();
+				string query = "SELECT * FROM users WHERE ActiveTask = " + task.ID + ";";
+				MySqlDataAdapter dataAdapter = new MySqlDataAdapter (query, connection);
+				DataSet ds = new DataSet ();
+				dataAdapter.Fill (ds, "users");
+				CloseConnection ();
+
+				if (ds.Tables ["users"].Rows.Count != 0) {
+					return false;
+				}
+
+				if (user.ActiveTask != DBDefaults.DefaultId) return false;
+				else {
+					user.ActiveTask = task.ID;
+					this.UpdateUser (user);
+					return true;
+				}
+			}
+			catch (Exception e) 
+			{
+				Console.WriteLine (e.ToString ());
+				return false;
+			}
+		} // End of GrantTask ()
+
 	} // End of Partial Class
 
 	public partial class DataBaseHandler

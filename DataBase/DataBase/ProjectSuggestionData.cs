@@ -8,16 +8,13 @@
  * the handler 20 times per add or read.
  */
 using System;
+using System.Data;
 
 namespace DataBase
 {
 	// This part contains all the methods of the class
-	public partial class ProjectSuggestionData
+	public partial class ProjectSuggestionData : DataBaseDataType
 	{
-
-		private string emptyMarker = "Blank";
-		private DateTime emptyDate = new DateTime (1970, 1, 1);
-		private int emptyId = 0;
 
 		/* Make sure everything is initialized as we want it.
 		 * If you have a better idea of doing it pls talk to Gyuri.
@@ -27,19 +24,28 @@ namespace DataBase
 		{
 			// Nothing to do here
 		}
-
 		public ProjectSuggestionData (int creatorId)
 		{
 
-			Title = emptyMarker;
-			ShortDescription = emptyMarker;
-			DetailedDescription = emptyMarker;
+			Title = DBDefaults.DefaultText;
+			ShortDescription = DBDefaults.DefaultText;
+			DetailedDescription = DBDefaults.DefaultText;
 			CreatedBy = creatorId;
-			DateCreated = emptyDate;
-			InvestmentRequired = emptyMarker;
-			EstimatedReturn = emptyMarker;
-			Priority = emptyMarker;
-			Notes = emptyMarker;
+			DateCreated = DBDefaults.DefaultDate;
+			InvestmentRequired = DBDefaults.DefaultText;
+			EstimatedReturn = DBDefaults.DefaultText;
+			Priority = DBDefaults.DefaultText;
+			Notes = DBDefaults.DefaultText;
+		} // End of Constructor
+
+		public string ToQueryString ()
+		{
+			return "Not Implemented";
+		} // End of ToQueryString ()
+
+		public void FillFromDataRow (DataRow row)
+		{
+			// TODO implement this method
 		}
 	}
 

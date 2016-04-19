@@ -43,6 +43,8 @@
     <Compile Include="ProjectData.cs" />
     <Compile Include="ProjectSuggestionData.cs" />
     <Compile Include="TaskData.cs" />
+    <Compile Include="DataBaseDataType.cs" />
+    <Compile Include="DBDefaults.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

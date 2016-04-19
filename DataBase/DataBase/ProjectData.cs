@@ -13,12 +13,8 @@ using System.Data;
 namespace DataBase
 {
 	// This part contains all the methods of the class
-	public partial class ProjectData
+	public partial class ProjectData : DataBaseDataType
 	{
-
-		private string emptyMarker = "Blank";
-		private DateTime emptyDate = new DateTime (1970, 1, 1);
-		private int emptyId = 0;
 
 		/* Make sure everything is initialized as we want it.
 		 * If you have a better idea of doing it pls talk to Gyuri.
@@ -28,25 +24,28 @@ namespace DataBase
 		{
 			// Nothing to do here
 		}
-
 		public ProjectData (int creatorId)
 		{
 
-			Title = emptyMarker;
-			ShortDescription = emptyMarker;
-			DetailedDescription = emptyMarker;
+			Title = DBDefaults.DefaultText;
+			ShortDescription = DBDefaults.DefaultText;
+			DetailedDescription = DBDefaults.DefaultText;
 			CreatedBy = creatorId;
 			ProjectLead = creatorId;
-			DateCreated = emptyDate;
-			LogURL = emptyMarker;
-			Notes = emptyMarker;
-			AvailibleFunds = emptyMarker;
-			CurrentYield = emptyMarker;
-			DateTerminated = emptyDate;
-			TerminationReason = emptyMarker;
-			TerminatedBy = emptyId;
-			CollectedFunds = emptyMarker;
-			ConsumedFunds = emptyMarker;
+			DateCreated = DBDefaults.DefaultDate;
+			LogURL = DBDefaults.DefaultText;
+			Notes = DBDefaults.DefaultText;
+			AvailibleFunds = DBDefaults.DefaultText;
+			CurrentYield = DBDefaults.DefaultText;
+			DateTerminated = DBDefaults.DefaultDate;
+			TerminationReason = DBDefaults.DefaultText;
+			TerminatedBy = DBDefaults.DefaultId;
+			CollectedFunds = DBDefaults.DefaultText;
+			ConsumedFunds = DBDefaults.DefaultText;
+		} 
+		public ProjectData (ProjectData project) 
+		{
+			//TODO implement this
 		} // End of Constructor
 
 		public string ToQueryString () 

@@ -8,16 +8,13 @@
  * the handler 20 times per add or read.
  */
 using System;
+using System.Data;
 
 namespace DataBase
 {
 	// This part contains all the methods of the class
-	public partial class TaskData
+	public partial class TaskData : DataBaseDataType
 	{
-
-		private string emptyMarker = "Blank";
-		private DateTime emptyDate = new DateTime (1970, 1, 1);
-		private int emptyId = 0;
 
 		/* Make sure everything is initialized as we want it.
 		 * If you have a better idea of doing it pls talk to Gyuri.
@@ -30,17 +27,17 @@ namespace DataBase
 
 		public TaskData (int creatorId)
 		{
-			ParentId = emptyId;
-			Title = emptyMarker;
-			ShortDescription = emptyMarker;
-			DetailedDescription = emptyMarker;
-			ParentProject = emptyId;
-			DateCreated = emptyDate;
+			ParentId = DBDefaults.DefaultId;
+			Title = DBDefaults.DefaultText;
+			ShortDescription = DBDefaults.DefaultText;
+			DetailedDescription = DBDefaults.DefaultText;
+			ParentProject = DBDefaults.DefaultId;
+			DateCreated = DBDefaults.DefaultDate;
 			CreatedBy = creatorId;
-			DateCompleted = emptyDate;
-			CompletedBy = emptyId;
-			DeadLine = emptyDate;
-			Status = emptyMarker;
+			DateCompleted = DBDefaults.DefaultDate;
+			CompletedBy = DBDefaults.DefaultId;
+			DeadLine = DBDefaults.DefaultDate;
+			Status = DBDefaults.DefaultText;
 		}
 
 		public string ToQueryString () 
@@ -61,6 +58,11 @@ namespace DataBase
 
 			return returnString += ")";
 		} // End of ToQueryString()
+
+		public void FillFromDataRow (DataRow row)
+		{
+			
+		} // FillFromDataRow ()
 	}
 
 	// This class contains all the attributes of the class, and 

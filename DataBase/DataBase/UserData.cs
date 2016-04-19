@@ -17,12 +17,8 @@ using System.Data;
 namespace DataBase
 {
 	// This part contains all the methods of the class
-	public partial class UserData
+	public partial class UserData : DataBaseDataType
 	{
-		 
-		private string emptyMarker = "Blank";
-		private DateTime emptyDate = new DateTime (1970, 1, 1);
-		private int emptyId = 0;
 
 		/* Make sure everything is initialized as we want it.
 		 * If you have a better idea of doing it pls talk to Gyuri.
@@ -35,27 +31,34 @@ namespace DataBase
 		public UserData (int secretaryId)
 		{
 
-			FirstName = emptyMarker;
-			LastName = emptyMarker;
-			DisplayName = emptyMarker;
-			AvatarURL = emptyMarker;
-			Email = emptyMarker;
-			Password = emptyMarker;
-			PhoneNumber = emptyMarker;
-			JoinDate = emptyDate;
+			FirstName = DBDefaults.DefaultText;
+			LastName = DBDefaults.DefaultText;
+			DisplayName = DBDefaults.DefaultText;
+			AvatarURL = DBDefaults.DefaultText;
+			Email = DBDefaults.DefaultText;
+			Password = DBDefaults.DefaultText;
+			PhoneNumber = DBDefaults.DefaultText;
+			JoinDate = DBDefaults.DefaultDate;
 			AddedById = secretaryId;
-			ActiveProject = emptyId;
-			ActiveTask = emptyId;
-			WorkStatus = emptyMarker;
-			PersonalNotes = emptyMarker;
-			DateLeft = emptyDate;
-			ReasonForLeaving = emptyMarker;
-			RejoinDesirability = emptyMarker;
-			Observations = emptyMarker;
+			ActiveProject = DBDefaults.DefaultId;
+			ActiveTask = DBDefaults.DefaultId;
+			WorkStatus = DBDefaults.DefaultText;
+			PersonalNotes = DBDefaults.DefaultText;
+			DateLeft = DBDefaults.DefaultDate;
+			ReasonForLeaving = DBDefaults.DefaultText;
+			RejoinDesirability = DBDefaults.DefaultText;
+			Observations = DBDefaults.DefaultText;
+		} // End of Constructor
+
+		public string ToQueryString() 
+		{
+			// TODO implement method
+			return "Not yet implemented";
 		}
 
 		//TODO Check if not null... Maybie with a function?
-		public void FillFromDataRow (DataRow row) {
+		public void FillFromDataRow (DataRow row) 
+		{
 			_id = int.Parse(row.ItemArray.GetValue (0).ToString ());
 			FirstName = row.ItemArray.GetValue (1).ToString ();
 			LastName = row.ItemArray.GetValue (2).ToString ();
@@ -76,13 +79,13 @@ namespace DataBase
 			}
 			catch (Exception e) {
 				Console.WriteLine (e.ToString ());
-				DateLeft = emptyDate;
+				DateLeft = DBDefaults.DefaultDate;
 			}
 			
 			ReasonForLeaving = row.ItemArray.GetValue (15).ToString ();
 			RejoinDesirability = row.ItemArray.GetValue (16).ToString ();
 			Observations = row.ItemArray.GetValue (17).ToString ();
-		}
+		} // End of FillFromDataRow()
 	}
 
 	// This class contains all the attributes of the class, and 

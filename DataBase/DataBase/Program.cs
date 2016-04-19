@@ -44,6 +44,7 @@ namespace DataBase
 
 		// User details can be used to fill in any data you want from the form
 		public void printUserDetails (UserData user) {
+			Console.WriteLine ("\n========================================");
 			Console.WriteLine ("\nPrinting user details...");
 			Console.WriteLine ("FirstName: " + user.FirstName);
 			Console.WriteLine ("LastName: " + user.LastName);
@@ -62,6 +63,7 @@ namespace DataBase
 			Console.WriteLine ("ReasonForLeaving: " + user.ReasonForLeaving);
 			Console.WriteLine ("RejoinDesirability: " + user.RejoinDesirability);
 			Console.WriteLine ("Observations: " + user.Observations);
+			Console.WriteLine ("\n========================================");
 		}
 	}
 }
