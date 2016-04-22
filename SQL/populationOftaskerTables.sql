@@ -23,6 +23,10 @@ CREATE TABLE `test`.`secretary` (
 	`JoinDate` DATE NOT NULL,
 	`Status` TEXT NOT NULL,
 	`PersonalNotes` TEXT NOT NULL,
+	`LeaveDate` DATE NULL,
+	`ReasonForLeaving` TEXT NULL,
+	`RejoinDesirability` TEXT NULL,
+	`Observations` TEXT NULL,
 	PRIMARY KEY (`Id`)
 );
 
