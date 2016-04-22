@@ -1,0 +1,8 @@
+!!! Nu lucram cu null-uri
+---> Absoulut toate field-urile trebuie sa fie NOT NULL
+---> Dupa ce faci toate field-urile NOT NULL, toate inserturile care fac popularea bazei de 
+date trebuie schimbate si trebuie adaugat la fiecare noile valori default
+---> Trebuie sa faci in asa fel incat sa nu dea nicio eroare cand se ruleaza tot script-ul
+---> Daca mai ai lucruri de modificat si daca mai modifici ceva spune-mi si mie ca sa pot modifica codul
+---> E de preferat ca asta sa fie ultima oara cand modificam field-urile din users si secretary, 
+e de preferat ca numele field-urilor sa ramana aceleasi
